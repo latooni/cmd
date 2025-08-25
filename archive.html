@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>swaggot.xyz</title>
+  <link href='https://fonts.googleapis.com/css?family=Allerta' rel='stylesheet'>
+  <link rel="icon" href="./imgs/ciblecursor.png">
+  <style>
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('../fonts/zai_TriumphTypewriter_b.otf') format('truetype');
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'CustomFont', Arial, sans-serif;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      padding-bottom: 50px;
+    }
+
+    .big {
+      margin-top: 50px;
+      font-size: 125px;
+      margin-bottom: 30px;
+    }
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 300px;
+    }
+
+    .text-box {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: bold;
+      color: black;
+    }
+
+    .back-button:hover {
+      color: grey;
+    }
+
+    /* --- CAROUSEL STYLES --- */
+
+    .carousel {
+      position: relative;
+      width: 100%;
+      /* Add some margin to make space for the arrows */
+      margin: 0 40px;
+    }
+
+    .carousel .image {
+      display: none; /* Hide all images by default */
+      width: 100%;
+      height: auto;
+    }
+
+    .carousel .image.active {
+      display: block; /* Show only the active image */
+    }
+
+    .carousel button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: transparent; /* No background */
+      color: black;
+      border: none;
+      font-size: 48px; /* Bigger arrow */
+      font-weight: bold;
+      padding: 0;
+      cursor: pointer;
+      user-select: none; /* Prevents text selection on double-click */
+      text-shadow: 0 0 5px white; /* Add shadow for visibility on images */
+    }
+
+    .carousel button:hover {
+      color: grey; /* Simple hover effect */
+    }
+
+    .carousel .prev {
+      /* Position arrow to the left of the image container */
+      left: -50px;
+    }
+
+    .carousel .next {
+      /* Position arrow to the right of the image container */
+      right: -50px;
+    }
+  </style>
+</head>
+<body>
+  <a href="./jewelry.html" class="back-button"> ← </a>
+  <div class="box">
+    <div class="big">ARCHIVES</div>
+    <div class="image-container">
+
+      <!-- FACE MASK -->
+      <div class="item">
+        <p class="text-box">Silver face mask made for @deloreanblack</p>
+        <div class="carousel">
+          <img src="./imgs/facemask1.png" class="image active" alt="facemask">
+          <img src="./imgs/facemask2.png" class="image" alt="facemask">
+          <img src="./imgs/facemask3.png" class="image" alt="facemask">
+          <button class="prev">‹</button>
+          <button class="next">›</button>
+        </div>
+      </div>
+
+      <!-- KEY -->
+      <div class="item">
+        <p class="text-box">House key for my house :3  </p>
+        <div class="carousel">
+          <img src="./imgs/key1.png" class="image active" alt="key">
+          <img src="./imgs/key2.png" class="image" alt="key">
+          <img src="./imgs/key3.png" class="image" alt="key">
+          <img src="./imgs/key4.png" class="image" alt="key">
+          <button class="prev">‹</button>
+          <button class="next">›</button>
+        </div>
+      </div>
+
+      <!-- WIDE HEART -->
+      <div class="item">
+        <p class="text-box">silver pendant piece </p>
+        <div class="carousel">
+          <img src="./imgs/wideheart1.jpg" class="image active" alt="wideheart">
+          <img src="./imgs/wideheart3.jpg" class="image" alt="wideheart">
+          <img src="./imgs/wideheart4.jpg" class="image" alt="wideheart">
+          <button class="prev">‹</button>
+          <button class="next">›</button>
+        </div>
+      </div>
+
+      <!-- CROSS PENDANT -->
+      <div class="item">
+        <p class="text-box">Silver cross pendant </p>
+        <div class="carousel">
+          <img src="./imgs/crosspendant1.jpg" class="image active" alt="cross">
+          <img src="./imgs/crosspendant2.jpg" class="image" alt="cross">
+          <img src="./imgs/crosspendant3.jpg" class="image" alt="cross">
+          <button class="prev">‹</button>
+          <button class="next">›</button>
+        </div>
+      </div>
+
+      <!-- DEMON CROSS -->
+      <div class="item">
+        <p class="text-box">Upside down style cross pendant</p>
+        <div class="carousel">
+          <img src="./imgs/demoncross1.jpg" class="image active" alt="demoncross">
+          <img src="./imgs/demoncross2.jpg" class="image" alt="demoncross">
+          <button class="prev">‹</button>
+          <button class="next">›</button>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Find all carousel containers on the page
+  const carousels = document.querySelectorAll('.carousel');
+
+  // Set up each carousel individually
+  carousels.forEach(carousel => {
+    // We no longer need the data-index attribute, we can manage state in JS
+    const images = carousel.querySelectorAll('.image');
+    const prevButton = carousel.querySelector('.prev');
+    const nextButton = carousel.querySelector('.next');
+    
+    // Each carousel gets its own index tracker
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      // Hide all images first
+      images.forEach((img, index) => {
+        img.classList.remove('active');
+      });
+      // Then show the correct one
+      images[currentIndex].classList.add('active');
+
+      // Update button visibility based on the current index
+      // Hide the 'prev' button if it's the first image
+      prevButton.style.display = (currentIndex === 0) ? 'none' : 'block';
+
+      // Hide the 'next' button if it's the last image
+      nextButton.style.display = (currentIndex === images.length - 1) ? 'none' : 'block';
+    }
+
+    // Add click event for the 'next' button
+    nextButton.addEventListener('click', () => {
+      if (currentIndex < images.length - 1) {
+        currentIndex++;
+        updateCarousel();
+      }
+    });
+
+    // Add click event for the 'previous' button
+    prevButton.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateCarousel();
+      }
+    });
+
+    // Initial call to set the correct button state and active image on page load
+    updateCarousel();
+  });
+});
+</script>
+
+</body>
+</html>

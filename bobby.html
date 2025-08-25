@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>swaggot.xyz</title>
+  <link href='https://fonts.googleapis.com/css?family=Allerta' rel='stylesheet'>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="icon" href="./imgs/ciblecursor.png">
+  <style>
+    /* Basic styles for landing and main pages */
+    .hidden { display: none; }
+    .fade-out { opacity: 0; transition: opacity 1s ease-out; }
+    .fade-in { opacity: 1; transition: opacity 1s ease-in; }
+    
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('./fonts/zai_TriumphTypewriter_b.otf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'CustomFont', Arial, sans-serif;
+      position: relative;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+
+    /* Landing Page */
+    .enter-container {
+      position: relative;
+      text-align: center;
+    }
+    
+    #enter-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      transition: text-shadow 0.3s ease;
+    }
+    
+    #enter-button:hover {
+      text-shadow: 0 0 10px white, 0 0 20px white;
+    }
+    
+    #cat-image {
+      position: absolute;
+      top: 50%;
+      left: calc(50% + 60px);
+      transform: translateY(-50%);
+      width: 200px;
+      height: 200px;
+      transition: transform 0.3s ease;
+    }
+    
+    #enter-button:hover + #cat-image {
+      transform: translateY(-50%) scale(1.2);
+    }
+    
+    /* Main Page */
+    #main-page {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    
+    /* Profile wrapper with bracket borders */
+    .profile-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .bracket {
+      height: 400px;  /* Adjust as needed */
+      width: auto;
+    }
+    
+    .profile-container {
+      background-color: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      color: white;
+    }
+    
+    .socials {
+      margin-top: 25px;
+
+    }
+    
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    
+    .social-icons a {
+      display: inline-block;
+    }
+    
+    .social-icons img {
+      width: 40px;
+      height: 40px;
+      vertical-align: middle;
+    }
+    
+    .social-button-container {
+      margin-top: 30px;
+      margin: auto;
+      width: 40%;
+      border: 2px solid white;
+      box-shadow: 0 -2px 10px white;
+      padding-top: 2px;
+      padding-bottom: 5px;
+      border-radius: 5px;
+      text-align: center;
+      text-align: -moz-center;
+      text-align: -webkit-center;
+    }
+    
+    .social-button {
+      background-color: black;
+      color: white;
+      font-size: 1.2rem;
+      padding-top: 5px;
+      padding-bottom: 8px;
+      cursor: pointer;
+      width: 100px;
+      text-align: center;
+    }
+    
+    .social-button-container:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px white;
+    }
+    
+    .social-button:active {
+      transform: scale(0.95);
+    }
+    
+    .soundbar {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;
+      background-color: black;
+      border: 3px solid white;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 -2px 10px white;
+      text-align: center;
+      margin-bottom: 25px;
+      color: white;
+    }
+    
+    .song-info {
+      margin-bottom: 10px;
+    }
+    
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      margin: 0 10px;
+    }
+    
+    .controls img {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .bobby {
+      font-size: 2rem;
+      color: white;
+    }
+    
+    #volume-slider {
+      -webkit-appearance: none;
+      width: 80px;
+      height: 5px;
+      background: white;
+      outline: none;
+      border-radius: 5px;
+    }
+    
+    #volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+    
+    #volume-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      background: white;
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+    
+    .corner-link {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      z-index: 100;
+    }
+    
+    .corner-link img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .downarrow img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .quote {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .downarrow div {
+      text-decoration: dotted; 
+      text-decoration: aliceblue;
+    }
+
+    @keyframes pulseGlow {
+      0% { opacity: 1; }
+      50% { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+
+    .pulse-link {
+      color: white;
+      text-decoration: underline;
+      animation: pulseGlow 1.5s infinite;
+      transition: color 0.3s ease, text-shadow 0.3s ease, opacity 0.3s ease;
+    }
+
+    .pulse-link:hover {
+      color: grey;
+      animation: none;
+      text-shadow: none;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Landing Page -->
+  <div id="landing" class="page">
+    <div class="enter-container">
+      <h1 id="enter-button">Enter</h1>
+      <img id="cat-image" src="./imgs/cat.png" alt="Cat Image">
+    </div>
+  </div>
+  
+  <!-- Main Page -->
+  <div id="main-page" class="page hidden">
+    <div class="profile-wrapper">
+      <img class="bracket bracket-left" src="./imgs/cb.png" alt="Left Bracket">
+      <div class="profile-container">
+        <div class="bobby">Bobby</div>
+        <div class="quote">too much swag im a swaggot</div>
+          <div class="downarrow">
+          <div>
+            i make 
+            <a href="./jewelry.html" class="pulse-link">jewelry</a> 
+            and design 
+            <a href="./websites.html" class="pulse-link">websites</a>
+          </div>
+            <img id="arrow" src="./imgs/downarrow.png" alt="arrow">
+          </div>
+          <div class="socials">
+            <div class="social-icons">
+              <a href="https://www.instagram.com/vame.jewelry/" target="_blank">
+                <img src="./imgs/instagram.png" alt="Instagram">
+              </a>
+              <a href="https://discord.com/users/1181288811519561838" target="_blank">
+                <img src="./imgs/discord.png" alt="Discord">
+              </a>
+              <a href="https://www.roblox.com/users/533313/profile" target="_blank">
+                <img src="./imgs/roblox.png" alt="roblox">
+              </a>
+            </div>
+        </div>
+      </div>
+      <img class="bracket bracket-right" src="./imgs/cb2.png" alt="Right Bracket">
+    </div>
+    
+    <!-- Soundbar -->
+    <div class="soundbar">
+      <div class="song-info">
+        <span id="song-title">Song Title</span> - <span id="song-artist">Artist Name</span>
+      </div>
+      <div class="controls">
+        <button id="play-btn">
+          <img id="play-img" src="./imgs/pause.png" alt="Play/Pause">
+        </button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01">
+        <button id="next-btn">
+          <img src="./imgs/nextsong.png" alt="Next Song">
+        </button>
+      </div>
+      <audio id="audio-player" src="./songs/novotel.mp3"></audio>
+    </div>
+  </div>
+  
+  <script>
+    // Page Transition Logic
+    const enterButton = document.getElementById('enter-button');
+    const landingPage = document.getElementById('landing');
+    const mainPage = document.getElementById('main-page');
+  
+    enterButton.addEventListener('click', () => {
+      landingPage.classList.add('fade-out');
+      setTimeout(() => {
+        landingPage.style.display = 'none';
+        mainPage.classList.remove('hidden');
+        mainPage.classList.add('fade-in');
+        audioPlayer.play();
+        playImg.src = './imgs/pause.png';
+      }, 1000);
+    });
+  
+    // Music Player Logic
+    const audioPlayer = document.getElementById('audio-player');
+    const playBtn = document.getElementById('play-btn');
+    const playImg = document.getElementById('play-img');
+    const nextBtn = document.getElementById('next-btn');
+    const volumeSlider = document.getElementById('volume-slider');
+    const songTitle = document.getElementById('song-title');
+    const songArtist = document.getElementById('song-artist');
+  
+    // Playlist with five songs
+    const playlist = [
+      { src: './songs/novotel.mp3', title: 'novotel', artist: 'Ajna' },
+      { src: './songs/ALAKAZAM.mp3', title: 'ALAKAZAM', artist: 'Luther' },
+      { src: './songs/newer me.mp3', title: 'Newer Me', artist: 'Lucki' },
+      { src: './songs/save me.mp3', title: 'Save Me', artist: 'Sosa' },
+      { src: './songs/4thebetta.mp3', title: '4thebetta', artist: 'Lucki' }
+    ];
+    let currentSong = 0;
+  
+    function loadSong(index) {
+      audioPlayer.src = playlist[index].src;
+      songTitle.textContent = playlist[index].title;
+      songArtist.textContent = playlist[index].artist;
+    }
+  
+    // Load the first song on page load
+    loadSong(currentSong);
+  
+    // Toggle play/pause functionality using images
+    playBtn.addEventListener('click', () => {
+      if (audioPlayer.paused) {
+        audioPlayer.play();
+        playImg.src = './imgs/pause.png';
+      } else {
+        audioPlayer.pause();
+        playImg.src = './imgs/play.png';
+      }
+    });
+  
+    // Next song button logic
+    nextBtn.addEventListener('click', () => {
+      currentSong = (currentSong + 1) % playlist.length;
+      loadSong(currentSong);
+      audioPlayer.play();
+      playImg.src = './imgs/pause.png';
+    });
+  
+    // Volume slider control
+    volumeSlider.addEventListener('input', () => {
+      audioPlayer.volume = volumeSlider.value;
+    });
+  
+    // Set a lower default volume
+    audioPlayer.volume = 0.2;
+    volumeSlider.value = 0.2;
+  
+    // Automatically play next song when current one ends
+    audioPlayer.addEventListener('ended', () => {
+      nextBtn.click();
+    });
+  </script>
+</body>
+</html>

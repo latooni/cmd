@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMD</title>
+  <link href="https://fonts.googleapis.com/css?family=Allerta" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/splash.css">
+  <link rel="icon" href="./imgs/ciblecursor.png">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <style>
+    @font-face {
+      font-family: 'CustomFont';
+      src: url('./fonts/zai_TriumphTypewriter_b.otf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    body {
+      user-select: none;
+      font-family: 'CustomFont', Arial, sans-serif;
+      background-color: black;
+      /* background-image: url('./imgs/windows.png'); */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      position: relative;
+    }
+    footer {
+      background-color: #1d1d1d;
+      width: 100%;
+      position: relative;
+      margin-top: auto;
+      height: 40px;
+    }
+    .elements img {
+      position: absolute;
+      bottom: 0;
+      height: 40px;
+    }
+    .left-img {
+      left: 0;
+    }
+    .right-img {
+      right: 0;
+    }
+    .center {
+      display: flex;
+    }
+    .cmd-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: auto;
+    }
+  
+    
+    
+    .cmd {
+      width: 977px;
+      height: 515px;
+      background-color: #0c0c0c;
+      border: 1px solid #262626;
+      overflow-y: auto;
+    }
+    .cmdtxt {
+      font-size: 14px;
+      font-family: Consolas, "Lucida Console", monospace;
+      width: 965px;
+      color: #cccccc;
+      line-height: 1.5;
+    }
+    /* Style for our contenteditable "input" */
+    .cmd-input {
+      display: inline-block;
+      outline: none;
+      font-family: Consolas, "Lucida Console", monospace;
+      font-size: 14px;
+      color: #cccccc;
+      caret-color: transparent;
+    }
+    /* Custom blinking caret */
+    .blinking-caret {
+      display: inline-block;
+      width: 8px;
+      height: 4px;
+      background-color: white;
+      margin-left: 2px;
+      vertical-align: bottom;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+
+    .recycle-bin {
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+      height: 72px;
+      width: 78px;
+      background-image: url('./imgs/recyclebin2.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .recycle-bin:hover {
+    background-color: rgba(139, 209, 255, 0.192); /* Blue background with small opacity */
+    border: 1px solid grey; /* Grey border */
+  }
+
+    
+    .music {
+      position: absolute;
+      bottom: 20px;
+      left: 10px;
+      height: 72px;
+      width: 78px;
+      background-image: url('./imgs/music2.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+      .music:hover {
+    background-color: rgba(139, 209, 255, 0.192); /* Blue background with small opacity */
+    border: 1px solid grey; /* Grey border */
+  }
+
+      .terms {
+      /* position: absolute;
+      bottom: 20px;
+      left: 45%; */
+      height: 72px;
+      width: 78px;
+      background-image: url('./imgs/test1.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+      .terms:hover {
+    background-color: rgba(139, 209, 255, 0.192); /* Blue background with small opacity */
+    border: 1px solid grey; /* Grey border */
+  }
+
+  .privacy {
+      /* position: absolute;
+      bottom: 20px;
+      left: 55%; */
+      height: 72px;
+      width: 78px;
+      background-image: url('./imgs/privacynobg.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+      .privacy:hover {
+    background-color: rgba(139, 209, 255, 0.192); /* Blue background with small opacity */
+    border: 1px solid grey; /* Grey border */
+  }
+
+    .return {
+      /* position: absolute;
+      bottom: 20px;
+      left: 50%; */
+      height: 72px;
+      width: 78px;
+      background-image: url('./imgs/returnnobg.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+      .return:hover {
+    background-color: rgba(139, 209, 255, 0.192); /* Blue background with small opacity */
+    border: 1px solid grey; /* Grey border */
+  }
+
+  /* Redirect Overlay */
+  .redirect-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    font-family: Consolas, "Lucida Console", monospace;
+    color: #cccccc;
+    font-size: 14px;
+  }
+
+  /* Text File Window Styles */
+  .text-file-window {
+    display: none;
+    position: fixed;
+    width: 796px;
+    height: 500px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+  }
+
+  .text-file-window.open {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  #privacyWindow {
+    top: 120px;
+    left: 100px;
+  }
+
+  #termsWindow {
+    top: 20px;
+    left: 100px;
+  }
+
+  #returnWindow {
+    top: 220px;
+    left: 100px;
+  }
+  
+
+  .footer {
+    position: absolute;
+    top: 500px;
+    left: -1px;
+  }
+
+  .header2 {
+    position: absolute;
+    top: -0.2px;
+    left: 741px;
+  }
+
+  .header2:hover {
+    content: url('./imgs/headertxtred.png');
+    transform: translateX(11px);
+  }
+
+
+  .text-file-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .text-file-title {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    color: #333;
+  }
+
+  .text-file-close {
+    cursor: pointer;
+    padding: 2px 8px;
+    font-size: 16px;
+    color: #666;
+  }
+
+  .text-file-content {
+    height: calc(100% - 70px);
+    overflow-y: auto;
+    font-family: Consolas, "Lucida Console", monospace;
+    font-size: 14px;
+    color: black;
+    white-space: pre-wrap;
+  }
+
+  /* Soundbar Styles */
+  .soundbar {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    background-color: #0c0c0c;
+    border: 2px solid #262626;
+    border-radius: 2px; 
+    padding: 10px;
+    /* box-shadow: 0 -2px 10px white; */
+    text-align: center;
+    margin-bottom: 25px;
+    color: white;
+    z-index: 1000;
+    font-family: Consolas, "Lucida Console", monospace;
+  }
+  
+  .song-info {
+    margin-bottom: 10px;
+  }
+  
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .controls button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    margin: 0 10px;
+  }
+  
+  .controls img {
+    width: 20px;
+    height: 20px;
+  }
+  
+#volume-slider {
+  -webkit-appearance: none; /* Resets default WebKit styling */
+  appearance: none;         /* Resets default browser styling */
+  width: 80px;
+  height: 5px;              /* This will be the height of the track */
+  background: transparent;    /* Make the base transparent */
+  outline: none;
+  cursor: url('./imgs/ciblecursor.png'), pointer;
+  /* border-radius will be applied to the track parts */
+}
+
+  #volume-slider::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 5px;
+    background: white; /* Makes the entire track white */
+    border-radius: 5px;
+    cursor: url('./imgs/ciblecursor.png'), pointer;
+  }
+
+  #volume-slider::-webkit-slider-thumb {
+    margin-top: -4px;
+  }
+
+  
+  #volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: url('./imgs/ciblecursor.png'), pointer;
+  }
+  
+  #volume-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    cursor: url('./imgs/ciblecursor.png'), pointer;
+  }
+
+  #cat-image {
+    position: absolute;
+    top: 50%;
+    left: calc(50% + 60px);
+    transform: translateY(-50%);
+    width: 200px;
+    height: 200px;
+    transition: transform 0.3s ease;
+  }
+
+    #enter-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 30px;
+      color: white;
+      cursor: pointer;
+      transition: text-shadow 0.3s ease;
+      font-family: Consolas, "Lucida Console", monospace;
+    }
+    
+    .footers { 
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      margin-bottom: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Splash Screen -->
+  <div class="splash-screen" id="splashScreen">
+    <div class="enter-button" id="enterButton">Enter</div>
+    <img id="cat-image" src="./imgs/cat.png" alt="Cat Image">
+  </div>
+
+  <!-- Text File Windows -->
+  <div class="text-file-window" id="privacyWindow">
+      <div class="text-file-header">
+        <img src="./imgs/headertxt.PNG" class="header"></img>
+        <img src="./imgs/headertxt2.PNG" class="header2" onclick="closeTextFile('privacyWindow')"></img>
+        <!-- <div class="text-file-close" onclick="closeTextFile('returnWindow')">×</div> -->
+      </div>
+      <div class="text-file-content">
+          Privacy Policy<br><br>We respect your privacy and are committed to protecting your personal information. This policy explains how we collect, use, and protect your data when you visit or make a purchase from our website.<br><br>Information We Collect<br>* Personal Data: Name, email, address, phone number.<br>* Usage Data: IP address, browser type, interactions on our site.<br><br>How We Use Your Data<br>* To process and fulfill your orders.<br>* To improve our services and website experience.<br><br>Data Sharing<br>Your information may be shared with trusted third parties for order processing, payments, and delivery. We ensure that all data handling complies with applicable privacy laws.<br><br>Your Rights<br>You may request to access, update, or delete your personal information at any time by contacting us at cmd@business.com<br><br>Updates to This Policy<br>We may update this policy from time to time. The latest version will always be available on our website.<br><br>Effective Date: 2025/05/15
+      </div>
+      <img src="./imgs/footertxt.PNG" class="footer"></img>
+  </div>
+
+  <div class="text-file-window" id="termsWindow">
+      <div class="text-file-header">
+        <img src="./imgs/headertxt.PNG" class="header"></img>
+        <img src="./imgs/headertxt2.PNG" class="header2" onclick="closeTextFile('termsWindow')"></img>
+        <!-- <div class="text-file-close" onclick="closeTextFile('returnWindow')">×</div> -->
+      </div>
+      <div class="text-file-content">
+          Terms and Conditions<br><br>Introduction<br>Welcome to our online store. By accessing or purchasing from our site, you agree to these terms and conditions. Please read them carefully.<br><br>Products and Purchases<br>All products are subject to availability and may vary slightly from the images displayed. Prices are listed in USD and may change without notice. Your order will be processed upon successful payment.<br><br>Shipping and Delivery<br>Shipping times and fees vary based on location. We are not responsible for delays caused by carriers or customs.<br><br>User Responsibilities<br>Users agree to provide accurate information when placing an order and to comply with all local laws. Misuse of the website or fraudulent activity may result in restricted access.<br><br>Intellectual Property<br>All content on our website, including images, text, and logos, is protected by copyright and may not be used without permission.<br><br>Liability<br>We are not liable for any indirect or consequential damages related to your use of our products or services.<br><br>Changes to Terms<br>We reserve the right to update these terms at any time. Continued use of the site constitutes acceptance of the revised terms.<br><br>Contact Us<br>For questions regarding these terms, contact us at cmd@business.com.<br><br>Effective Date: 2025/05/15
+      </div>
+      <img src="./imgs/footertxt.PNG" class="footer"></img>
+  </div>
+    <div class="text-file-window" id="returnWindow">
+      <div class="text-file-header">
+        <img src="./imgs/headertxt.PNG" class="header"></img>
+        <img src="./imgs/headertxt2.PNG" class="header2" onclick="closeTextFile('returnWindow')"></img>
+        <!-- <div class="text-file-close" onclick="closeTextFile('returnWindow')">×</div> -->
+      </div>
+      <div class="text-file-content">
+          Return Policy = no return retard
+      </div>
+      <img src="./imgs/footertxt.PNG" class="footer"></img>
+  </div>
+
+  <!-- Redirect Overlay -->
+  <div class="redirect-overlay" id="redirectOverlay">redirecting...</div>
+
+  <div class="cmd-container">
+    <div id="cmd3d-container"></div>
+    <div class="cmd">
+      <img src="./imgs/topcmd2.png" alt="topcmd" class="topcmd">
+      <div class="center">
+        <div class="cmdtxt">
+          <div>CMD [Version 1.1]</div>
+          <div>Input the Number of the Page you Want to visit.</div>
+          <div>&nbsp;</div>
+          <!-- The static menu options -->
+          <div>1. Jewelry</div>
+          <div>2. Commission</div>
+          <div>3. About me</div>
+          <div>&nbsp;</div>
+          <!-- Terminal output container -->
+          <div id="terminal"></div>
+        </div>
+        <!-- <img src="./imgs/rightcmd.png" alt="rightcmd" class="rightcmd"> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- <footer>
+    <div class="elements">
+      <img src="./imgs/taskbarleft.png" alt="taskbar_elements_left" class="left-img">
+      <img src="./imgs/taskbarright.png" alt="taskbar_elements_right" class="right-img">
+    </div>
+  </footer> -->
+
+  <!-- Recycle Bin -->
+  <div class="recycle-bin"></div>
+  <div class="music"></div>
+  <div class="footers">
+    <div class="terms"></div> 
+    <div class="return"></div>
+    <div class="privacy"></div>
+  </div>
+
+  <!-- Soundbar -->
+  <div class="soundbar">
+    <div class="song-info">
+      <span id="song-title">Song Title</span> - <span id="song-artist">Artist Name</span>
+    </div>
+    <div class="controls">
+      <button id="play-btn">
+        <img id="play-img" src="./imgs/pause.png" alt="Play/Pause">
+      </button>
+      <input type="range" id="volume-slider" min="0" max="1" step="0.01">
+      <button id="next-btn">
+        <img src="./imgs/nextsong.png" alt="Next Song">
+      </button>
+    </div>
+    <audio id="audio-player" src="./songs/novotel.mp3"></audio>
+  </div>
+
+  <script>
+  document.getElementById('enterButton').addEventListener('click', function() {
+    const splashScreen = document.getElementById('splashScreen');
+    splashScreen.classList.add('fade-out');
+    setTimeout(() => {
+        splashScreen.classList.add('hidden');
+        // Start playing music when entering the site
+        const audioPlayer = document.getElementById('audio-player');
+        audioPlayer.play();
+        document.getElementById('play-img').src = './imgs/pause.png';
+    }, 1000);
+  });
+
+  let currentInputSpan = null;
+
+  function createPrompt() {
+    const promptLine = document.createElement('div');
+    promptLine.classList.add('prompt-line');
+    promptLine.innerHTML = 'C:\\Users\\CMD>';
+
+    // Create a contenteditable span to capture user input
+    const inputSpan = document.createElement('span');
+    inputSpan.contentEditable = true;
+    inputSpan.classList.add('cmd-input');
+    inputSpan.spellcheck = false;
+    promptLine.appendChild(inputSpan);
+
+    // Create the custom blinking caret element
+    const caret = document.createElement('span');
+    caret.classList.add('blinking-caret');
+    promptLine.appendChild(caret);
+
+    document.getElementById('terminal').appendChild(promptLine);
+
+    // Store reference to the current input field
+    currentInputSpan = inputSpan;
+
+    // Focus the editable span immediately
+    inputSpan.focus();
+
+    // Listen for Enter key
+    inputSpan.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent inserting a newline
+        processInput(inputSpan, promptLine);
+      }
+    });
+
+    // Scroll into view
+    promptLine.scrollIntoView();
+  }
+
+  function processInput(inputSpan, promptLine) {
+    const inputVal = inputSpan.innerText.trim();
+    promptLine.removeChild(inputSpan);
+    const caret = promptLine.querySelector('.blinking-caret');
+    promptLine.removeChild(caret);
+    promptLine.innerHTML = 'C:\\Users\\CMD>' + inputVal;
+
+    if (["1", "2", "3"].includes(inputVal)) {
+      switch (inputVal) {
+        case "1":
+          window.location.href = "jewelry.html";
+          break;
+        case "2":
+          window.location.href = "contact.html";
+          break;
+        case "3":
+          window.location.href = "bobby.html";
+          break;
+      }
+    } else {
+      const errorLine = document.createElement('div');
+      errorLine.style.color = 'grey';
+      errorLine.innerText = 'Invalid input. Please try again.';
+      document.getElementById('terminal').appendChild(errorLine);
+      createPrompt();
+    }
+  }
+
+  // Automatically refocus the input if the user clicks anywhere
+  document.addEventListener('click', function () {
+    if (currentInputSpan) {
+      currentInputSpan.focus();
+    }
+  });
+
+  window.onload = function () {
+    createPrompt();
+  };
+
+  // Add these functions at the beginning of your script section
+  function openTextFile(windowId) {
+    // Close any open windows first
+    const allWindows = document.querySelectorAll('.text-file-window');
+    allWindows.forEach(window => {
+      window.style.display = 'none';
+      window.classList.remove('open');
+    });
+
+    // Open the requested window
+    const window = document.getElementById(windowId);
+    window.style.display = 'block';
+    // Trigger reflow
+    window.offsetHeight;
+    window.classList.add('open');
+  }
+
+  function closeTextFile(windowId) {
+    const window = document.getElementById(windowId);
+    window.classList.remove('open');
+    // Wait for animation to finish before hiding
+    setTimeout(() => {
+      window.style.display = 'none';
+    }, 200);
+  }
+
+  // Add click event listeners to your text file icons
+  document.querySelector('.privacy').addEventListener('click', () => {
+    const privacyWindow = document.getElementById('privacyWindow');
+    if (privacyWindow.classList.contains('open')) {
+      closeTextFile('privacyWindow');
+    } else {
+      openTextFile('privacyWindow');
+    }
+  });
+
+  document.querySelector('.terms').addEventListener('click', () => {
+    const termsWindow = document.getElementById('termsWindow');
+    if (termsWindow.classList.contains('open')) {
+      closeTextFile('termsWindow');
+    } else {
+      openTextFile('termsWindow');
+    }
+  });
+
+  document.querySelector('.return').addEventListener('click', () => {
+    const returnWindow = document.getElementById('returnWindow');
+    if (returnWindow.classList.contains('open')) {
+      closeTextFile('returnWindow');
+    } else {
+      openTextFile('returnWindow');
+    }
+  });
+
+  // Music Player Logic
+  const audioPlayer = document.getElementById('audio-player');
+  const playBtn = document.getElementById('play-btn');
+  const playImg = document.getElementById('play-img');
+  const nextBtn = document.getElementById('next-btn');
+  const volumeSlider = document.getElementById('volume-slider');
+  const songTitle = document.getElementById('song-title');
+  const songArtist = document.getElementById('song-artist');
+  const soundbar = document.querySelector('.soundbar');
+  const musicIcon = document.querySelector('.music');
+
+  // Playlist with five songs
+  const playlist = [
+    { src: './songs/novotel.mp3', title: 'novotel', artist: 'Ajna' },
+    { src: './songs/ALAKAZAM.mp3', title: 'ALAKAZAM', artist: 'Luther' },
+    { src: './songs/newer me.mp3', title: 'Newer Me', artist: 'Lucki' },
+    { src: './songs/save me.mp3', title: 'Save Me', artist: 'Sosa' },
+    { src: './songs/4thebetta.mp3', title: '4thebetta', artist: 'Lucki' }
+  ];
+  let currentSong = 0;
+
+  function loadSong(index) {
+    audioPlayer.src = playlist[index].src;
+    songTitle.textContent = playlist[index].title;
+    songArtist.textContent = playlist[index].artist;
+  }
+
+  // Load the first song on page load
+  loadSong(currentSong);
+
+  // Toggle soundbar visibility when clicking music icon
+  musicIcon.addEventListener('click', () => {
+    if (soundbar.style.display === 'none' || soundbar.style.display === '') {
+      soundbar.style.display = 'block';
+    } else {
+      soundbar.style.display = 'none';
+    }
+  });
+
+  // Toggle play/pause functionality using images
+  playBtn.addEventListener('click', () => {
+    if (audioPlayer.paused) {
+      audioPlayer.play();
+      playImg.src = './imgs/pause.png';
+    } else {
+      audioPlayer.pause();
+      playImg.src = './imgs/play.png';
+    }
+  });
+
+  // Next song button logic
+  nextBtn.addEventListener('click', () => {
+    currentSong = (currentSong + 1) % playlist.length;
+    loadSong(currentSong);
+    audioPlayer.play();
+    playImg.src = './imgs/pause.png';
+  });
+
+  // Volume slider control
+  volumeSlider.addEventListener('input', () => {
+    audioPlayer.volume = volumeSlider.value;
+  });
+
+  // Set a lower default volume
+  audioPlayer.volume = 0.2;
+  volumeSlider.value = 0.2;
+
+  // Automatically play next song when current one ends
+  audioPlayer.addEventListener('ended', () => {
+    nextBtn.click();
+  });
+  </script>
+  <script type="module" src="./js/cmd3d.js"></script>
+</body>
+</html>

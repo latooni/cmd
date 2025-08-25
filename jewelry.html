@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jewelry - CMD</title>
+  <link rel="icon" href="./imgs/ciblecursor.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: white;
+      color: #000;
+      line-height: 1.4;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      background-color: white;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .back-arrow {
+      font-size: 24px;
+      cursor: pointer;
+      color: #000;
+      text-decoration: none;
+    }
+
+    .grid-icon {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .profile-icon {
+      width: 24px;
+      height: 24px;
+      background-color: #000;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .cart-count {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .cart-icon {
+      width: 20px;
+      height: 20px;
+      background-color: #000;
+      border-radius: 2px;
+    }
+
+    .main-content {
+      padding: 40px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .product-item {
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .product-item.hidden {
+      display: none;
+    }
+
+    .product-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .product-item.fade-out {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 350px;
+      background-color: #f8f8f8;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .product-item:hover .product-image img {
+      transform: scale(1.05);
+    }
+
+    .product-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+      z-index: 1;
+    }
+
+    .product-item:hover .product-image::before {
+      transform: translateX(100%);
+    }
+
+    .product-code {
+      font-size: 14px;
+      font-weight: 500;
+      color: #000;
+      letter-spacing: 0.5px;
+    }
+
+    .category-nav {
+      display: flex;
+      align-items: center;
+
+    }
+
+    .category-option {
+      font-size: 16px;
+      font-weight: 500;
+      color: #666;
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .category-option:hover {
+      color: #000;
+    }
+
+    .category-option.active {
+      color: #000;
+    }
+
+    .category-separator {
+      font-weight: 300;
+    }
+
+    .archive-btn {
+      color: grey;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      text-transform: lowercase;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 16px;
+    }
+
+    .archive-btn:hover {
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 15px;
+      }
+      
+      .main-content {
+        padding: 20px 15px;
+      }
+      
+      .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+      
+      .product-image {
+        height: 300px;
+      }
+      
+      .page-title {
+        font-size: 28px;
+        margin-bottom: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .products-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+      
+      .product-image {
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="nav-left">
+      <a href="index.html" class="back-arrow">←</a>
+    </div>
+    
+    <div class="nav-center">
+      <div class="category-nav">
+        <div class="category-option" data-category="rings">rings</div>
+        <div class="category-separator">|</div>
+        <div class="category-option" data-category="bracelets">bracelets</div>
+        <div class="category-separator">|</div>
+        <div class="category-option" data-category="pendants">pendants</div>
+      </div>
+    </div>
+    
+    <div class="nav-right">
+      <button class="archive-btn" onclick="window.location.href='archive.html'">archive</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="products-grid">
+      <div class="product-item" data-category="rings">
+        <div class="product-image">
+          <img src="./jewelry_imgs/ring1.webp" alt="Ring 1">
+        </div>
+        <div class="product-code">JR-01</div>
+      </div>
+      
+      <div class="product-item" data-category="rings">
+        <div class="product-image">
+          <img src="./jewelry_imgs/ring2.webp" alt="Ring 2">
+        </div>
+        <div class="product-code">JR-02</div>
+      </div>
+      
+      <div class="product-item" data-category="rings">
+        <div class="product-image">
+          <img src="./jewelry_imgs/ring3.webp" alt="Ring 3">
+        </div>
+        <div class="product-code">JR-03</div>
+      </div>
+      
+      <div class="product-item" data-category="rings">
+        <div class="product-image">
+          <img src="./jewelry_imgs/ring4.webp" alt="Ring 4">
+        </div>
+        <div class="product-code">JR-04</div>
+      </div>
+      
+      <div class="product-item" data-category="rings">
+        <div class="product-image">
+          <img src="./jewelry_imgs/ring5.webp" alt="Ring 5">
+        </div>
+        <div class="product-code">JR-05</div>
+      </div>
+      
+      <div class="product-item" data-category="rings">
+        <div class="product-image">
+          <img src="./jewelry_imgs/ring6.webp" alt="Ring 6">
+        </div>
+        <div class="product-code">JR-06</div>
+      </div>
+      
+      <div class="product-item" data-category="bracelets">
+        <div class="product-image">
+          <img src="./jewelry_imgs/bracelet1.webp" alt="Bracelet 1">
+        </div>
+        <div class="product-code">BR-01</div>
+      </div>
+      
+      <div class="product-item" data-category="bracelets">
+        <div class="product-image">
+          <img src="./jewelry_imgs/bracelet2.webp" alt="Bracelet 2">
+        </div>
+        <div class="product-code">BR-02</div>
+      </div>
+      
+      <div class="product-item" data-category="bracelets">
+        <div class="product-image">
+          <img src="./jewelry_imgs/bracelet3.webp" alt="Bracelet 3">
+        </div>
+        <div class="product-code">BR-03</div>
+      </div>
+      
+      <div class="product-item" data-category="bracelets">
+        <div class="product-image">
+          <img src="./jewelry_imgs/bracelet4.webp" alt="Bracelet 4">
+        </div>
+        <div class="product-code">BR-04</div>
+      </div>
+      
+      <div class="product-item" data-category="bracelets">
+        <div class="product-image">
+          <img src="./jewelry_imgs/bracelet5.webp" alt="Bracelet 5">
+        </div>
+        <div class="product-code">BR-05</div>
+      </div>
+      
+      <div class="product-item" data-category="bracelets">
+        <div class="product-image">
+          <img src="./jewelry_imgs/bracelet6.webp" alt="Bracelet 6">
+        </div>
+        <div class="product-code">BR-06</div>
+      </div>
+      
+      <div class="product-item" data-category="pendants">
+        <div class="product-image">
+          <img src="./jewelry_imgs/pendant1.webp" alt="Pendant 1">
+        </div>
+        <div class="product-code">PR-01</div>
+      </div>
+      
+      <div class="product-item" data-category="pendants">
+        <div class="product-image">
+          <img src="./jewelry_imgs/pendant2.webp" alt="Pendant 2">
+        </div>
+        <div class="product-code">PR-02</div>
+      </div>
+      
+      <div class="product-item" data-category="pendants">
+        <div class="product-image">
+          <img src="./jewelry_imgs/pendant3.webp" alt="Pendant 3">
+        </div>
+        <div class="product-code">PR-03</div>
+      </div>
+      
+      <div class="product-item" data-category="pendants">
+        <div class="product-image">
+          <img src="./jewelry_imgs/pendant4.webp" alt="Pendant 4">
+        </div>
+        <div class="product-code">PR-04</div>
+      </div>
+      
+      <div class="product-item" data-category="pendants">
+        <div class="product-image">
+          <img src="./jewelry_imgs/pendant5.webp" alt="Pendant 5">
+        </div>
+        <div class="product-code">PR-05</div>
+      </div>
+      
+      <div class="product-item" data-category="pendants">
+        <div class="product-image">
+          <img src="./jewelry_imgs/pendant6.webp" alt="Pendant 6">
+        </div>
+        <div class="product-code">PR-06</div>
+      </div>
+    </div>
+  </main>
+
+
+  <script>
+    // Category filtering functionality
+    const categoryOptions = document.querySelectorAll('.category-option');
+    const productItems = document.querySelectorAll('.product-item');
+    let currentCategory = null; // null means showing all
+
+    // Add click event listeners to category options
+    categoryOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const selectedCategory = this.getAttribute('data-category');
+        
+        // If clicking the same category that's already active, show all
+        if (currentCategory === selectedCategory) {
+          // Remove active state from all options
+          categoryOptions.forEach(opt => opt.classList.remove('active'));
+          currentCategory = null;
+          filterProducts('all');
+        } else {
+          // Update active state
+          categoryOptions.forEach(opt => opt.classList.remove('active'));
+          this.classList.add('active');
+          currentCategory = selectedCategory;
+          filterProducts(selectedCategory);
+        }
+      });
+    });
+
+    function filterProducts(category) {
+      productItems.forEach(item => {
+        const itemCategory = item.getAttribute('data-category');
+        
+        if (category === 'all' || itemCategory === category) {
+          // Show item with animation
+          item.classList.remove('hidden');
+          setTimeout(() => {
+            item.classList.remove('fade-out');
+          }, 50);
+        } else {
+          // Hide item with animation
+          item.classList.add('fade-out');
+          setTimeout(() => {
+            item.classList.add('hidden');
+          }, 300);
+        }
+      });
+    }
+
+    // Add click event listeners to product items
+    document.querySelectorAll('.product-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const productCode = this.querySelector('.product-code').textContent;
+        alert(`Selected ${productCode}`);
+      });
+    });
+
+    // Simple cart functionality
+    let cartCount = 0;
+    const cartCountElement = document.querySelector('.cart-count');
+    
+    document.querySelectorAll('.product-item').forEach(item => {
+      item.addEventListener('dblclick', function() {
+        cartCount++;
+        if (cartCountElement) {
+          cartCountElement.textContent = cartCount;
+        }
+        
+        const productCode = this.querySelector('.product-code').textContent;
+        alert(`Added ${productCode} to cart!`);
+      });
+    });
+
+    // Add some subtle animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, observerOptions);
+
+    // Observe all product items
+    document.querySelectorAll('.product-item').forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(20px)';
+      item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(item);
+    });
+  </script>
+</body>
+</html> 
