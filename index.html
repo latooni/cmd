@@ -62,6 +62,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-top: 50px;
       margin-right: auto;
       margin-left: auto;
     }
@@ -585,12 +586,7 @@
     promptLine.classList.add('prompt-line');
     promptLine.innerHTML = 'C:\\Users\\CMD>';
 
-    // Create a contenteditable span to capture user input
-    const inputSpan = document.createElement('span');
-    inputSpan.contentEditable = true;
-    inputSpan.classList.add('cmd-input');
-    inputSpan.spellcheck = false;
-    promptLine.appendChild(inputSpan);
+
 
     // Create the custom blinking caret element
     const caret = document.createElement('span');
